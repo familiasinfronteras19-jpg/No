@@ -1,0 +1,92 @@
+@import url('https://fonts.googleapis.com/css2?family=Montserrat:wght@100..900&display=swap');
+
+* { box-sizing: border-box; }
+
+html, body {
+    margin: 0;
+    min-height: 100%;
+}
+
+body {
+    background-color: rgb(0, 162, 14);
+    min-height: 100vh;
+    min-height: 100dvh;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 16px;
+    padding: env(safe-area-inset-top) 12px calc(12px + env(safe-area-inset-bottom));
+    font-family: 'Montserrat', Arial, sans-serif;
+}
+
+/* Cabecera: se adapta al ancho de la pantalla */
+.cabecera {
+    position: relative;
+    width: min(1000px, 100%);
+    background-color: rgb(192, 255, 5);
+    border: 1px solid green;
+    border-radius: 0 0 clamp(30px, 10vw, 100px) clamp(30px, 10vw, 100px);
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    padding: 16px 16px 10px;
+}
+
+.cabecera h1 {
+    margin: 4px 0 0;
+    font-size: clamp(1.4rem, 5vw, 2.4rem);
+}
+
+.logo {
+    width: clamp(70px, 22vw, 160px);
+    height: auto;
+}
+
+/* Panel de tareas */
+.materias {
+    width: min(1100px, 100%);
+    flex: 1;
+    background-color: rgb(0, 84, 0);
+    border-radius: clamp(24px, 8vw, 100px);
+    padding: clamp(16px, 4vw, 40px);
+    display: flex;
+    justify-content: center;
+    align-items: flex-start;
+    font-family: 'Franklin Gothic Medium', 'Arial Narrow', Arial, sans-serif;
+}
+
+.texto-materias {
+    width: 100%;
+    text-align: center;
+    color: white;
+}
+
+.texto-materias h1 {
+    font-size: clamp(1.3rem, 5vw, 2.2rem);
+    margin: 0 0 12px;
+}
+
+#contenedor-tareas ul {
+    text-align: left;
+    list-style-type: disc;
+    padding-left: 20px;
+    color: white;
+    margin: 0;
+}
+
+#contenedor-tareas h2 {
+    font-size: clamp(1rem, 3.6vw, 1.5rem);
+    margin: 8px 0;
+    overflow-wrap: anywhere;
+}
+
+/* Pantallas grandes (tablet / escritorio) */
+@media (min-width: 900px) {
+    body { padding-top: 0; }
+}
+
+/* Móviles en horizontal */
+@media (max-height: 480px) and (orientation: landscape) {
+    .logo { width: 60px; }
+    .cabecera { flex-direction: row; justify-content: center; gap: 16px; padding: 8px; }
+}
