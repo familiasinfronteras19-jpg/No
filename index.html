@@ -1,28 +1,117 @@
 <!DOCTYPE html>
 <html lang="es">
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
-    <meta name="theme-color" content="#00a20e">
-     <meta name="google-site-verification" content="a5bb701e387c4324" />
-    <title>Tareas - by family</title>
-    <link rel="icon" href="icon.png" type="image/png">
-    <link rel="manifest" href="manifest.json">
-    <link rel="stylesheet" href="style.css">
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
+<meta name="theme-color" content="#00a20e">
+<meta name="google-site-verification" content="a5bb701e387c4324" />
+<title>Tareas - by family</title>
+<link rel="icon" href="icon.png" type="image/png">
+<link rel="manifest" href="manifest.json">
+<link rel="stylesheet" href="style.css">
 </head>
 <body>
-    <header class="cabecera">
-        <img class="logo" src="icon.png" alt="">
-        <h1>tareas - by family</h1>
-    </header>
+<header class="cabecera">
+<img class="logo" src="icon.png" alt="">
+<h1>tareas - by family</h1>
+</header>
+<main class="materias">
+<div class="texto-materias">
+<h1>TAREAS DEL DIA</h1>
+<div id="contenedor-tareas">Cargando tareas desde Google Drive...</div>
+</div>
+</main>
 
-    <main class="materias">
-        <div class="texto-materias">
-            <h1>TAREAS DEL DIA</h1>
-            <div id="contenedor-tareas">Cargando tareas desde Google Drive...</div>
-        </div>
-    </main>
+<section class="materias horario-panel">
+<div class="texto-materias">
+<h1>HORARIO DE CLASE · 2º ESO (2026/27)</h1>
+<div class="tabla-horario">
+<table class="horario">
+<thead>
+<tr>
+<th scope="col">Hora</th>
+<th scope="col">Lunes</th>
+<th scope="col">Martes</th>
+<th scope="col">Miércoles</th>
+<th scope="col">Jueves</th>
+<th scope="col">Viernes</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<th scope="row">08:00 - 09:00</th>
+<td class="tecnologia">Tecnología</td>
+<td class="mates">Matemáticas</td>
+<td class="mates">Matemáticas</td>
+<td class="ingles">Inglés</td>
+<td class="musica">Música</td>
+</tr>
+<tr>
+<th scope="row">09:00 - 10:00</th>
+<td class="religion">Religión</td>
+<td class="historia">Geografía e Historia</td>
+<td class="historia">Geografía e Historia</td>
+<td class="frances">Francés / Oratoria</td>
+<td class="mates">Matemáticas</td>
+</tr>
+<tr>
+<th scope="row">10:00 - 11:00</th>
+<td class="historia">Geografía e Historia</td>
+<td class="valores">Educación en Valores Cívicos y Éticos</td>
+<td class="tecnologia">Tecnología</td>
+<td class="lengua">Lengua</td>
+<td class="lengua">Lengua</td>
+</tr>
+<tr class="recreo">
+<th scope="row">R</th>
+<td>E</td>
+<td>C</td>
+<td>R</td>
+<td>E</td>
+<td>O</td>
+</tr>
+<tr>
+<th scope="row">11:30 - 12:30</th>
+<td class="musica">Música</td>
+<td class="ingles">Inglés</td>
+<td class="frances">Francés / Oratoria</td>
+<td class="fisquim">Física y Química</td>
+<td class="tecnologia">Tecnología</td>
+</tr>
+<tr>
+<th scope="row">12:30 - 13:30</th>
+<td class="lengua">Lengua</td>
+<td class="fisquim">Física y Química</td>
+<td class="edfisica">Ed. Física</td>
+<td class="mates">Matemáticas</td>
+<td class="fisquim">Física y Química</td>
+</tr>
+<tr>
+<th scope="row">13:30 - 14:30</th>
+<td class="ingles">Inglés</td>
+<td class="lengua">Lengua</td>
+<td class="tutoria">Tutoría</td>
+<td class="edfisica">Ed. Física</td>
+<td class="ingles">Inglés</td>
+</tr>
+</tbody>
+</table>
+</div>
+</div>
+</section>
 
-    <script src="app.js"></script>
+<script src="app.js"></script>
+<script>
+// Resalta la columna del día de hoy (lunes a viernes)
+(function () {
+  var d = new Date().getDay();
+  if (d < 1 || d > 5) return;
+  document.querySelectorAll('.horario tr').forEach(function (tr) {
+    if (tr.classList.contains('recreo')) return;
+    var c = tr.children[d];
+    if (c) c.classList.add('dia-hoy');
+  });
+})();
+</script>
 </body>
 </html>
