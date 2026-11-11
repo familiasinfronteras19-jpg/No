@@ -447,3 +447,56 @@ body.visor-abierto { overflow: hidden; }
   background: white;
   box-shadow: 0 0 0 3px rgb(192, 255, 5);
 }
+/* ---------- Materias (pegar al FINAL de style.css) ---------- */
+
+.materias-filtros { margin-top: -6px; }
+
+.chip-materia {
+  font: inherit;
+  font-size: clamp(0.75rem, 3.2vw, 0.95rem);
+  font-weight: 600;
+  color: white;
+  background: rgba(0, 0, 0, 0.25);
+  border: 1px dashed rgba(255, 255, 255, 0.5);
+  border-radius: 999px;
+  padding: 6px 12px;
+  cursor: pointer;
+  -webkit-tap-highlight-color: transparent;
+}
+
+.chip-materia b {
+  background: rgba(255, 255, 255, 0.2);
+  border-radius: 999px;
+  padding: 1px 7px;
+  margin-left: 4px;
+  font-size: 0.85em;
+}
+
+.chip-materia.activo {
+  background: #ffd166;
+  color: rgb(60, 30, 0);
+  border: 1px solid #ffd166;
+}
+
+.chip-materia.activo b { background: rgba(60, 30, 0, 0.2); }
+
+.grupo { margin: 0 0 22px; text-align: left; }
+
+.grupo-titulo {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  margin: 0 0 10px;
+  padding-bottom: 6px;
+  font-size: clamp(1.05rem, 4vw, 1.5rem);
+  border-bottom: 2px solid rgba(192, 255, 5, 0.6);
+  color: rgb(192, 255, 5);
+}
+
+.grupo-titulo b {
+  background: rgba(255, 255, 255, 0.18);
+  color: white;
+  border-radius: 999px;
+  padding: 1px 9px;
+  font-size: 0.7em;
+}
