@@ -71,6 +71,7 @@ const TIPOS = {
   tarea: { nombre: 'Tareas', singular: 'Tarea', emoji: '📝' },
   examen: { nombre: 'Exámenes', singular: 'Examen', emoji: '📚' },
   evento: { nombre: 'Eventos', singular: 'Evento', emoji: '🎉' }
+  cuaderno: { nombre: 'cuadernos', singular: 'cuadernos', emoji: '📓' }
 };
 
 const CLAVE_FILTRO = 'tareas_filtro';
