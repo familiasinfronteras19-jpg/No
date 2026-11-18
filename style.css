@@ -500,3 +500,95 @@ body.visor-abierto { overflow: hidden; }
   padding: 1px 9px;
   font-size: 0.7em;
 }
+* {
+  box-sizing: border-box;
+}
+
+body {
+  margin: 0;
+  min-height: 100vh;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-family: system-ui, -apple-system, sans-serif;
+  background: #f3f4f6;
+  padding: 1rem;
+}
+
+.card {
+  background: #fff;
+  width: 100%;
+  max-width: 360px;
+  padding: 2rem;
+  border-radius: 12px;
+  box-shadow: 0 4px 16px rgba(0, 0, 0, 0.1);
+}
+
+.logo {
+  display: block;
+  width: 64px;
+  height: 64px;
+  margin: 0 auto 0.5rem;
+}
+
+h1 {
+  font-size: 1.4rem;
+  text-align: center;
+  margin: 0 0 1.5rem;
+  color: #111;
+}
+
+label {
+  font-size: 0.85rem;
+  color: #444;
+}
+
+input {
+  width: 100%;
+  padding: 0.7rem;
+  margin: 0.3rem 0 1rem;
+  border: 1px solid #ccc;
+  border-radius: 8px;
+  font-size: 1rem;
+}
+
+button {
+  width: 100%;
+  padding: 0.75rem;
+  background: #00a20e;
+  color: #fff;
+  border: 0;
+  border-radius: 8px;
+  font-size: 1rem;
+  cursor: pointer;
+}
+
+button:disabled {
+  opacity: 0.6;
+  cursor: default;
+}
+
+.enlace {
+  text-align: center;
+  margin-top: 1.2rem;
+  font-size: 0.9rem;
+}
+
+.enlace a {
+  color: #00a20e;
+}
+
+#msg {
+  margin-top: 1rem;
+  text-align: center;
+  font-size: 0.9rem;
+  min-height: 1.2em;
+}
+
+.ok {
+  color: #16a34a;
+}
+
+.err {
+  color: #dc2626;
+}
