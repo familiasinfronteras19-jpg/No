@@ -2,43 +2,74 @@
 <html lang="es">
 <head>
 <meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
 <meta name="theme-color" content="#00a20e">
-<meta name="google-site-verification" content="a5bb701e387c4324" />
-<title>Tareas - by family</title>
-<link rel="icon" href="icon.png" type="image/png">
-<link rel="manifest" href="manifest.json">
-
-<!-- Si no hay sesión iniciada, manda al login del otro repo -->
-<script>
-  if (!localStorage.getItem('sesionEmail')) {
-    location.replace('https://familiasinfronteras19-jpg.github.io/login-familias/login.html');
-  }
-</script>
-
+<title>Iniciar sesión - Tareas</title>
+<link rel="icon" href="https://familiasinfronteras19-jpg.github.io/No/icon.png" type="image/png">
 <link rel="stylesheet" href="style.css">
 </head>
 <body>
+<div class="card">
+  <img class="logo" src="https://familiasinfronteras19-jpg.github.io/No/icon.png" alt="">
+  <h1>Iniciar sesión</h1>
+  <form id="form">
+    <label for="email">Correo electrónico</label>
+    <input type="email" id="email" required autocomplete="email">
 
-<header class="cabecera">
-<img class="logo" src="icon.png" alt="">
-<h1>tareas - by family</h1>
-<button id="cerrar-sesion" type="button" style="margin-left:auto;padding:.4rem .8rem;border:1px solid #ccc;border-radius:6px;background:#fff;color:#111;cursor:pointer;font-size:.85rem;">Cerrar sesión</button>
-</header>
+    <label for="password">Contraseña</label>
+    <input type="password" id="password" required autocomplete="current-password">
 
-<main class="materias">
-<div class="texto-materias">
-<h1>TAREAS DEL DIA</h1>
-<div id="contenedor-tareas">Cargando tareas desde Google Drive...</div>
+    <button type="submit" id="btn">Entrar</button>
+  </form>
+  <div id="msg"></div>
+  <div class="enlace">¿No tienes cuenta? <a href="registro.html">Regístrate</a></div>
 </div>
-</main>
 
 <script>
-  document.getElementById('cerrar-sesion').addEventListener('click', () => {
-    localStorage.removeItem('sesionEmail');
-    location.replace('https://familiasinfronteras19-jpg.github.io/login-familias/login.html');
+  const API_URL = 'PEGA_AQUI_LA_URL_DEL_APPS_SCRIPT_DE_CUENTAS';
+  const APP_URL = 'https://familiasinfronteras19-jpg.github.io/No/';
+  const $ = id => document.getElementById(id);
+
+  // Si ya hay sesión iniciada, no mostrar el login
+  if (localStorage.getItem('sesionEmail')) {
+    location.replace(APP_URL);
+  }
+
+  $('form').addEventListener('submit', async e => {
+    e.preventDefault();
+    const msg = $('msg');
+
+    $('btn').disabled = true;
+    msg.className = '';
+    msg.textContent = 'Entrando...';
+
+    try {
+      const res = await fetch(API_URL, {
+        method: 'POST',
+        body: JSON.stringify({
+          action: 'login',
+          email: $('email').value,
+          password: $('password').value
+        })
+      });
+      const data = await res.json();
+
+      if (data.ok) {
+        localStorage.setItem('sesionEmail', data.email);
+        msg.className = 'ok';
+        msg.textContent = '¡Bienvenido! Entrando a la app...';
+        setTimeout(() => location.replace(APP_URL), 800);
+        return;
+      }
+
+      msg.className = 'err';
+      msg.textContent = data.error;
+    } catch (err) {
+      msg.className = 'err';
+      msg.textContent = 'No se pudo conectar con el servidor.';
+    }
+    $('btn').disabled = false;
   });
 </script>
-<script src="app.js"></script>
 </body>
 </html>
