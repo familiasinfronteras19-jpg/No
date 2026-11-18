@@ -50,7 +50,7 @@
 
     try {
       // Se añade "&t=" con la hora actual para evitar que el navegador use una copia vieja en caché
-      const res = await fetch(`${CSV_CUENTAS_URL}&t=${Date.now()}`, { cache: 'no-store' });
+     const res = await fetch(`${CSV_CUENTAS_URL}&t=${Date.now()}`, { cache: 'no-store' });
       if (!res.ok) throw new Error('Error al descargar las cuentas');
 
       const textoCsv = await res.text();
@@ -60,7 +60,7 @@
       let cuentaValida = false;
 
       // Empezamos en i = 1 para saltar la fila 1 de encabezados (Email, Password)
-      for (let i = 1; i < filas.length; i++) {
+for (let i = 0; i < filas.length; i++) {
         const columnas = filas[i].split(',');
         const emailHoja = (columnas[0] || '').replace(/^"|"$/g, '').trim().toLowerCase();
         const passHoja = (columnas[1] || '').replace(/^"|"$/g, '').trim();
