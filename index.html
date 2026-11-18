@@ -22,15 +22,18 @@
     <button type="submit" id="btn">Entrar</button>
   </form>
   <div id="msg"></div>
-  <div class="enlace">¿No tienes cuenta? <a href="registro.html">Regístrate</a></div>
 </div>
 
 <script>
-  const API_URL = 'PEGA_AQUI_LA_URL_DEL_APPS_SCRIPT';
-  const APP_URL = 'https://familiasinfronteras19-jpg.github.io/No/';
+  // 1. Pega aquí el enlace CSV de tu hoja "Accounts" (Archivo > Compartir > Publicar en la web > CSV)
+  const CSV_CUENTAS_URL = 'https://docs.google.com/spreadsheets/d/1CkBScP1G6IAxq-tdPbQZxc4Fann2mQzL7U9nDMIcSsU/edit?usp=drivesdk';
+
+  // 2. Ruta exacta a la pantalla principal de tus tareas
+  const APP_URL = 'https://github.io';
+
   const $ = id => document.getElementById(id);
 
-  // Si ya hay sesión iniciada, ir directo a la app
+  // Si el usuario ya inició sesión antes en este navegador, entra directo
   if (localStorage.getItem('sesionEmail')) {
     location.replace(APP_URL);
   }
@@ -38,24 +41,38 @@
   $('form').addEventListener('submit', async e => {
     e.preventDefault();
     const msg = $('msg');
+    const emailIngresado = $('email').value.trim().toLowerCase();
+    const passIngresada = $('password').value.trim();
 
     $('btn').disabled = true;
     msg.className = '';
-    msg.textContent = 'Entrando...';
+    msg.textContent = 'Verificando cuenta...';
 
     try {
-      const res = await fetch(API_URL, {
-        method: 'POST',
-        body: JSON.stringify({
-          action: 'login',
-          email: $('email').value,
-          password: $('password').value
-        })
-      });
-      const data = await res.json();
+      // Se añade "&t=" con la hora actual para evitar que el navegador use una copia vieja en caché
+      const res = await fetch(`${CSV_CUENTAS_URL}&t=${Date.now()}`, { cache: 'no-store' });
+      if (!res.ok) throw new Error('Error al descargar las cuentas');
 
-      if (data.ok) {
-        localStorage.setItem('sesionEmail', data.email);
+      const textoCsv = await res.text();
+      // Separamos el archivo por líneas (ignorando líneas vacías)
+      const filas = textoCsv.split(/\r?\n/).filter(linea => linea.trim() !== '');
+
+      let cuentaValida = false;
+
+      // Empezamos en i = 1 para saltar la fila 1 de encabezados (Email, Password)
+      for (let i = 1; i < filas.length; i++) {
+        const columnas = filas[i].split(',');
+        const emailHoja = (columnas[0] || '').replace(/^"|"$/g, '').trim().toLowerCase();
+        const passHoja = (columnas[1] || '').replace(/^"|"$/g, '').trim();
+
+        if (emailHoja === emailIngresado && passHoja === passIngresada) {
+          cuentaValida = true;
+          break;
+        }
+      }
+
+      if (cuentaValida) {
+        localStorage.setItem('sesionEmail', emailIngresado);
         msg.className = 'ok';
         msg.textContent = '¡Bienvenido! Entrando a la app...';
         setTimeout(() => location.replace(APP_URL), 800);
@@ -63,11 +80,12 @@
       }
 
       msg.className = 'err';
-      msg.textContent = data.error;
+      msg.textContent = 'Correo o contraseña incorrectos.';
     } catch (err) {
       msg.className = 'err';
-      msg.textContent = 'No se pudo conectar con el servidor.';
+      msg.textContent = 'No se pudo conectar con la lista de cuentas.';
     }
+
     $('btn').disabled = false;
   });
 </script>
