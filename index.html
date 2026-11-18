@@ -50,7 +50,7 @@
 
     try {
       // Se añade "&t=" con la hora actual para evitar que el navegador use una copia vieja en caché
-     const res = await fetch(`${CSV_CUENTAS_URL}&t=${Date.now()}`, { cache: 'no-store' });
+const res = await fetch(`${CSV_CUENTAS_URL}&t=${Date.now()}`, { cache: 'no-store' });
       if (!res.ok) throw new Error('Error al descargar las cuentas');
 
       const textoCsv = await res.text();
