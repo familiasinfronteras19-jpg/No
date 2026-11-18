@@ -26,11 +26,11 @@
 </div>
 
 <script>
-  const API_URL = 'PEGA_AQUI_LA_URL_DEL_APPS_SCRIPT_DE_CUENTAS';
+  const API_URL = 'PEGA_AQUI_LA_URL_DEL_APPS_SCRIPT';
   const APP_URL = 'https://familiasinfronteras19-jpg.github.io/No/';
   const $ = id => document.getElementById(id);
 
-  // Si ya hay sesión iniciada, no mostrar el login
+  // Si ya hay sesión iniciada, ir directo a la app
   if (localStorage.getItem('sesionEmail')) {
     location.replace(APP_URL);
   }
