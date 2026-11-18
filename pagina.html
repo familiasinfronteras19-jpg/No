@@ -1,0 +1,44 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
+<meta name="theme-color" content="#00a20e">
+<meta name="google-site-verification" content="a5bb701e387c4324" />
+<title>Tareas - by family</title>
+<link rel="icon" href="icon.png" type="image/png">
+<link rel="manifest" href="manifest.json">
+
+<!-- Si no hay sesión iniciada, manda al login del otro repo -->
+<script>
+  if (!localStorage.getItem('sesionEmail')) {
+    location.replace('https://familiasinfronteras19-jpg.github.io/login-familias/');
+  }
+</script>
+
+<link rel="stylesheet" href="style.css">
+</head>
+<body>
+
+<header class="cabecera">
+<img class="logo" src="icon.png" alt="">
+<h1>tareas - by family</h1>
+<button id="cerrar-sesion" type="button" style="margin-left:auto;padding:.4rem .8rem;border:1px solid #ccc;border-radius:6px;background:#fff;color:#111;cursor:pointer;font-size:.85rem;">Cerrar sesión</button>
+</header>
+
+<main class="materias">
+<div class="texto-materias">
+<h1>TAREAS DEL DIA</h1>
+<div id="contenedor-tareas">Cargando tareas desde Google Drive...</div>
+</div>
+</main>
+
+<script>
+  document.getElementById('cerrar-sesion').addEventListener('click', () => {
+    localStorage.removeItem('sesionEmail');
+    location.replace('https://familiasinfronteras19-jpg.github.io/login-familias/');
+  });
+</script>
+<script src="app.js"></script>
+</body>
+</html>
