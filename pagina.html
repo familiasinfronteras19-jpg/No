@@ -120,6 +120,31 @@
 </div>
 </div>
 </section>
+<!-- Botón y lógica independiente para cerrar sesión -->
+<div id="bloque-cerrar-sesion" style="width: 100%; display: flex; justify-content: center; margin: 12px 0 24px;">
+  <button id="btn-salir" type="button" style="width: auto; padding: 12px 28px; background: #dc2626; color: #ffffff; border: 2px solid #ffffff; border-radius: 999px; font-family: 'Montserrat', Arial, sans-serif; font-size: 1rem; font-weight: 700; cursor: pointer; box-shadow: 0 4px 12px rgba(0,0,0,0.25);">
+    Cerrar sesión
+  </button>
+</div>
+
+<script>
+  (function () {
+    // 1. Protege la página: si no hay sesión iniciada, devuelve al login
+    if (!localStorage.getItem('sesionEmail')) {
+      location.replace('index.html');
+      return;
+    }
+
+    // 2. Acción del botón Cerrar sesión
+    const btnSalir = document.getElementById('btn-salir');
+    if (btnSalir) {
+      btnSalir.addEventListener('click', function () {
+        localStorage.removeItem('sesionEmail');
+        location.replace('index.html');
+      });
+    }
+  })();
+</script>
 
     <script src="app.js"></script>
 <script src="app.js"></script>
