@@ -116,6 +116,7 @@ function tipoDeCelda(c) {
   if (/^(tarea|tareas|deber|deberes)$/.test(n)) return 'tarea';
   if (/^(examen|examenes|prueba|pruebas|evaluacion|evaluaciones)$/.test(n)) return 'examen';
   if (/^(evento|eventos|actividad|actividades)$/.test(n)) return 'evento';
+  if (/^(cuaderno|cuadernos)$/.test(n)) return 'cuaderno';
   return null;
 }
 
@@ -214,7 +215,8 @@ function htmlItem(it) {
 }
 
 function dibujar() {
-  const cuenta = { todo: items.length, tarea: 0, examen: 0, evento: 0 };
+  const cuenta = { todo: items.length };
+  Object.keys(TIPOS).forEach(k => cuenta[k] = 0);
   items.forEach(it => cuenta[it.tipo]++);
   if (filtroActual !== 'todo' && !TIPOS[filtroActual]) filtroActual = 'todo';
 
