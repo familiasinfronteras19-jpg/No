@@ -25,16 +25,36 @@
 </div>
 
 <script>
-  // 1. Pega aquí el enlace CSV de tu hoja "Accounts" (Archivo > Compartir > Publicar en la web > CSV)
+  // 1. Enlace CSV de la hoja "Accounts"
   const CSV_CUENTAS_URL = 'https://docs.google.com/spreadsheets/d/e/2PACX-1vS0YJX2GY1wqKvB2zX8QGkkCopcUOfTWnxT8BclGIfUX4JWxBqsygD3sXv-Q1L3GMSA4viXH7o3pMkv/pub?output=csv';
 
   // 2. Ruta exacta a la pantalla principal de tus tareas
   const APP_URL = 'pagina.html';
 
+  const ROLES_VALIDOS = ['estudiante', 'admin', 'creador'];
   const $ = id => document.getElementById(id);
 
-  // Si el usuario ya inició sesión antes en este navegador, entra directo
-  if (localStorage.getItem('sesionEmail')) {
+  // Separa una línea CSV respetando las comillas
+  function parsearLinea(linea) {
+    const celdas = [];
+    let actual = '', entreComillas = false;
+    for (let i = 0; i < linea.length; i++) {
+      const c = linea[i];
+      if (c === '"') {
+        if (entreComillas && linea[i + 1] === '"') { actual += '"'; i++; }
+        else entreComillas = !entreComillas;
+      } else if (c === ',' && !entreComillas) {
+        celdas.push(actual); actual = '';
+      } else {
+        actual += c;
+      }
+    }
+    celdas.push(actual);
+    return celdas.map(c => c.trim());
+  }
+
+  // Si ya hay sesión completa (correo y rol), entra directo
+  if (localStorage.getItem('sesionEmail') && localStorage.getItem('sesionRol')) {
     location.replace(APP_URL);
   }
 
@@ -49,30 +69,30 @@
     msg.textContent = 'Verificando cuenta...';
 
     try {
-      // Se añade "&t=" con la hora actual para evitar que el navegador use una copia vieja en caché
-const res = await fetch(`${CSV_CUENTAS_URL}&t=${Date.now()}`, { cache: 'no-store' });
+      const res = await fetch(`${CSV_CUENTAS_URL}&t=${Date.now()}`, { cache: 'no-store' });
       if (!res.ok) throw new Error('Error al descargar las cuentas');
 
       const textoCsv = await res.text();
-      // Separamos el archivo por líneas (ignorando líneas vacías)
       const filas = textoCsv.split(/\r?\n/).filter(linea => linea.trim() !== '');
 
       let cuentaValida = false;
+      let rolEncontrado = '';
 
-      // Empezamos en i = 1 para saltar la fila 1 de encabezados (Email, Password)
-for (let i = 0; i < filas.length; i++) {
-        const columnas = filas[i].split(',');
-        const emailHoja = (columnas[0] || '').replace(/^"|"$/g, '').trim().toLowerCase();
-        const passHoja = (columnas[1] || '').replace(/^"|"$/g, '').trim();
-
-        if (emailHoja === emailIngresado && passHoja === passIngresada) {
+      for (let i = 1; i < filas.length; i++) { // i = 1 salta el encabezado
+        const [emailHoja, passHoja, rolHoja] = parsearLinea(filas[i]);
+        if (emailHoja.toLowerCase() === emailIngresado && passHoja === passIngresada) {
           cuentaValida = true;
+          rolEncontrado = (rolHoja || '').toLowerCase();
           break;
         }
       }
 
       if (cuentaValida) {
+        const rol = ROLES_VALIDOS.includes(rolEncontrado) ? rolEncontrado : 'estudiante';
         localStorage.setItem('sesionEmail', emailIngresado);
+        localStorage.setItem('sesionRol', rol);
+        sessionStorage.setItem('sesionPass', passIngresada);
+
         msg.className = 'ok';
         msg.textContent = '¡Bienvenido! Entrando a la app...';
         setTimeout(() => location.replace(APP_URL), 800);
