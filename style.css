@@ -591,3 +591,55 @@ button:disabled {
 .err {
   color: #dc2626;
 }
+/* ---------- Formulario de admin ---------- */
+
+.panel-admin {
+  width: min(560px, 100%);
+  margin: 0 auto 20px;
+  padding: 16px;
+  background: rgba(0, 0, 0, 0.25);
+  border: 1px dashed rgba(192, 255, 5, 0.6);
+  border-radius: 16px;
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+  text-align: left;
+  color: white;
+}
+
+.panel-admin h3 {
+  margin: 0 0 4px;
+  color: rgb(192, 255, 5);
+}
+
+.panel-admin select,
+.panel-admin input {
+  font: inherit;
+  width: 100%;
+  margin: 0;
+  padding: 10px;
+  border-radius: 10px;
+  border: 1px solid rgba(255, 255, 255, 0.4);
+  background: rgba(255, 255, 255, 0.12);
+  color: white;
+}
+
+.panel-admin select option {
+  color: #000;
+}
+
+.panel-admin button[type="submit"] {
+  width: auto;
+  align-self: flex-end;
+  padding: 10px 20px;
+  border-radius: 999px;
+  background: rgb(192, 255, 5);
+  color: rgb(0, 60, 0);
+  font-weight: 700;
+}
+
+.panel-admin #admin-msg {
+  margin: 4px 0 0;
+  min-height: 1.2em;
+  font-size: 0.9rem;
+}
