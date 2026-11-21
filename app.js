@@ -298,9 +298,11 @@ function dibujar() {
     html += `
       <form id="form-admin" class="panel-admin">
         <h3>Añadir información</h3>
-        <select id="admin-hoja">
-          <option value="tareas">Tareas</option>
-          <option value="otra">Otra tabla</option>
+        <select id="admin-tipo">
+          <option value="tarea">Tarea</option>
+          <option value="examen">Examen</option>
+          <option value="evento">Evento</option>
+          <option value="cuaderno">Cuaderno</option>
         </select>
         <input id="admin-col1" placeholder="Materia" required>
         <input id="admin-col2" placeholder="Detalle" required>
@@ -342,13 +344,14 @@ document.getElementById('contenedor-tareas').addEventListener('submit', async e 
   e.preventDefault();
   const msg = document.getElementById('admin-msg');
   const fila = [
+    document.getElementById('admin-tipo').value,
     document.getElementById('admin-col1').value.trim(),
     document.getElementById('admin-col2').value.trim(),
     document.getElementById('admin-col3').value.trim()
   ];
   msg.textContent = 'Guardando...';
   try {
-    const res = await guardarFila(document.getElementById('admin-hoja').value, fila);
+    const res = await guardarFila('tareas', fila);
     msg.textContent = res.ok ? '✅ Guardado' : '❌ ' + res.error;
     if (res.ok) e.target.reset();
   } catch (err) {
