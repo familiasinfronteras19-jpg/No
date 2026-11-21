@@ -5,6 +5,32 @@ const esApp = !!(window.Capacitor && window.Capacitor.isNativePlatform && window
 let ultimoPintado = null; // hash del último CSV dibujado (evita repintar si no hay cambios)
 let galerias = []; // una entrada por fila con imágenes: { titulo, urls }
 
+// Permisos por rol
+const rolActual = localStorage.getItem('sesionRol') || 'estudiante';
+const PERMISOS = {
+  estudiante: ['ver'],
+  admin: ['ver', 'gestionar'],
+  creador: ['ver', 'crear']
+};
+const puede = accion => (PERMISOS[rolActual] || []).includes(accion);
+
+// Script de Google Apps Script que escribe en las hojas
+const URL_SCRIPT = 'https://script.google.com/macros/s/AKfycbxyNjQbMs2GWkJ6pM_8jXlIzi3Zs_sLAAFckgluWOtm62r-e-1yI-H7y8YrFvmERyEv9A/exec';
+
+async function guardarFila(hoja, fila) {
+  const r = await fetch(URL_SCRIPT, {
+    method: 'POST',
+    headers: { 'Content-Type': 'text/plain;charset=utf-8' },
+    body: JSON.stringify({
+      email: localStorage.getItem('sesionEmail'),
+      password: sessionStorage.getItem('sesionPass'),
+      hoja,
+      fila
+    })
+  });
+  return r.json();
+}
+
 // Evita que el texto de la hoja pueda inyectar HTML
 function escapar(texto) {
   return texto.replace(/[&<>"']/g, c => ({ '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;', "'": '&#39;' }[c]));
@@ -266,6 +292,24 @@ function dibujar() {
     const lista = filtroMateria === 'todas' ? delTipo : (porMateria.get(filtroMateria) || []);
     if (lista.length) cuerpo = `<ul>${lista.map(htmlItem).join('')}</ul>`;
   }
+
+  // Formulario solo para admins
+  if (puede('gestionar')) {
+    html += `
+      <form id="form-admin" class="panel-admin">
+        <h3>Añadir información</h3>
+        <select id="admin-hoja">
+          <option value="tareas">Tareas</option>
+          <option value="otra">Otra tabla</option>
+        </select>
+        <input id="admin-col1" placeholder="Materia" required>
+        <input id="admin-col2" placeholder="Detalle" required>
+        <input id="admin-col3" placeholder="Fecha (dd/mm/aaaa)">
+        <button type="submit">Guardar</button>
+        <p id="admin-msg"></p>
+      </form>`;
+  }
+
   html += cuerpo || '<p class="vacio">No hay nada en esta categoría.</p>';
 
   document.getElementById('contenedor-tareas').innerHTML = html;
@@ -289,6 +333,26 @@ document.getElementById('contenedor-tareas').addEventListener('click', e => {
     filtroMateria = m.dataset.m;
     try { localStorage.setItem(CLAVE_MATERIA, filtroMateria); } catch (err) {}
     dibujar();
+  }
+});
+
+// Envío del formulario de admin
+document.getElementById('contenedor-tareas').addEventListener('submit', async e => {
+  if (e.target.id !== 'form-admin') return;
+  e.preventDefault();
+  const msg = document.getElementById('admin-msg');
+  const fila = [
+    document.getElementById('admin-col1').value.trim(),
+    document.getElementById('admin-col2').value.trim(),
+    document.getElementById('admin-col3').value.trim()
+  ];
+  msg.textContent = 'Guardando...';
+  try {
+    const res = await guardarFila(document.getElementById('admin-hoja').value, fila);
+    msg.textContent = res.ok ? '✅ Guardado' : '❌ ' + res.error;
+    if (res.ok) e.target.reset();
+  } catch (err) {
+    msg.textContent = '❌ No se pudo conectar con el servidor.';
   }
 });
 
